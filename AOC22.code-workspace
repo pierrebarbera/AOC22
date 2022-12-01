@@ -1,12 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"files.trimTrailingWhitespace": true,
-		"editor.formatOnPaste": true,
-		"editor.formatOnSave": true
-	}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }
