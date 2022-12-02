@@ -16,6 +16,10 @@ pub fn day2(args: &[String]) {
     println!("Following the strategy guide CORRECTLY we would get a score of {correct_score}");
 }
 
+const ROCK: &str = "A";
+const PAPER: &str = "B";
+const SCISSORS: &str = "C";
+
 fn run_strategy<P, F>(filename: P, score_func: F) -> u32
 where
     P: AsRef<Path>,
@@ -39,18 +43,18 @@ fn strategy_to_hand<'a>(opponent_hand: &'a str, strategy: &'a str) -> &'a str {
     match strategy {
         // X means we need to lose
         "X" => match opponent_hand {
-            "A" => "C",
-            "B" => "A",
-            "C" => "B",
+            ROCK => SCISSORS,
+            PAPER => ROCK,
+            SCISSORS => PAPER,
             _ => panic!("Invalid hand: {}", opponent_hand),
         },
         // Y means we need to draw
         "Y" => opponent_hand,
         // Z means we need to win
         "Z" => match opponent_hand {
-            "A" => "B",
-            "B" => "C",
-            "C" => "A",
+            ROCK => PAPER,
+            PAPER => SCISSORS,
+            SCISSORS => ROCK,
             _ => panic!("Invalid hand: {}", opponent_hand),
         },
         _ => panic!("Invalid strategy: {}", strategy),
@@ -67,9 +71,9 @@ const SCORE_MATRIX: [[u32; 3]; 3] = [[4, 1, 7], [8, 5, 2], [3, 9, 6]];
 
 fn hand_index(hand: &str) -> usize {
     match hand {
-        "A" | "X" => 0,
-        "B" | "Y" => 1,
-        "C" | "Z" => 2,
+        ROCK | "X" => 0,
+        PAPER | "Y" => 1,
+        SCISSORS | "Z" => 2,
         _ => panic!("Invalid hand: {}", hand),
     }
 }
