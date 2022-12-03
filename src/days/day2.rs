@@ -84,7 +84,6 @@ fn strategy_to_hand<'a>(opponent_hand: Hand, strategy: &'a str) -> Hand {
             Hand::Rock => Hand::Scissors,
             Hand::Paper => Hand::Rock,
             Hand::Scissors => Hand::Paper,
-            // _ => panic!("Invalid hand: {}", opponent_hand),
         },
         // Y means we need to draw
         "Y" => opponent_hand.clone(),
@@ -93,7 +92,6 @@ fn strategy_to_hand<'a>(opponent_hand: Hand, strategy: &'a str) -> Hand {
             Hand::Rock => Hand::Paper,
             Hand::Paper => Hand::Scissors,
             Hand::Scissors => Hand::Rock,
-            // _ => panic!("Invalid hand: {}", opponent_hand),
         },
         _ => panic!("Invalid strategy: {}", strategy),
     }
