@@ -16,25 +16,27 @@ pub fn day2(args: &[String]) {
 
     let correct_score = run_strategy(&args[0], |a, b| {
         let a = Hand::from_str(a).unwrap();
+        let b = Strategy::from_str(b).unwrap();
         rock_paper_scissors(a, strategy_to_hand(a, b))
     });
     println!("Following the strategy guide CORRECTLY we would get a score of {correct_score}");
 }
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 enum Hand {
     Rock = 0,
     Paper = 1,
     Scissors = 2,
 }
 #[derive(Debug, Clone)]
-struct HandInvalidErr;
+struct HandInvalidErr {
+    msg: String,
+}
 impl Error for HandInvalidErr {}
 impl fmt::Display for HandInvalidErr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Could not convert to Hand")
+        write!(f, "Could not convert to Hand : {}", self.msg)
     }
 }
-
 impl Hand {
     fn as_str(&self) -> &'static str {
         match self {
@@ -48,7 +50,9 @@ impl Hand {
             "A" | "X" => Ok(Hand::Rock),
             "B" | "Y" => Ok(Hand::Paper),
             "C" | "Z" => Ok(Hand::Scissors),
-            _ => Err(HandInvalidErr),
+            _ => Err(HandInvalidErr {
+                msg: input.to_string(),
+            }),
         }
     }
 }
@@ -77,23 +81,63 @@ where
     return score;
 }
 
-fn strategy_to_hand<'a>(opponent_hand: Hand, strategy: &'a str) -> Hand {
+#[derive(Debug, Clone, Copy)]
+enum Strategy {
+    Lose = 0,
+    Draw = 1,
+    Win = 2,
+}
+#[derive(Debug, Clone)]
+struct StrategyInvalidErr {
+    msg: String,
+}
+impl Error for StrategyInvalidErr {}
+impl fmt::Display for StrategyInvalidErr {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Could not convert to Strategy: {}", self.msg)
+    }
+}
+impl Strategy {
+    fn as_str(&self) -> &'static str {
+        match self {
+            Strategy::Lose => "X",
+            Strategy::Draw => "Y",
+            Strategy::Win => "Z",
+        }
+    }
+    fn from_str(input: &str) -> Result<Strategy, StrategyInvalidErr> {
+        match input {
+            "X" => Ok(Strategy::Lose),
+            "Y" => Ok(Strategy::Draw),
+            "Z" => Ok(Strategy::Win),
+            _ => Err(StrategyInvalidErr {
+                msg: input.to_string(),
+            }),
+        }
+    }
+}
+impl fmt::Display for Strategy {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+fn strategy_to_hand(opponent_hand: Hand, strategy: Strategy) -> Hand {
     match strategy {
         // X means we need to lose
-        "X" => match opponent_hand {
+        Strategy::Lose => match opponent_hand {
             Hand::Rock => Hand::Scissors,
             Hand::Paper => Hand::Rock,
             Hand::Scissors => Hand::Paper,
         },
         // Y means we need to draw
-        "Y" => opponent_hand.clone(),
+        Strategy::Draw => opponent_hand.clone(),
         // Z means we need to win
-        "Z" => match opponent_hand {
+        Strategy::Win => match opponent_hand {
             Hand::Rock => Hand::Paper,
             Hand::Paper => Hand::Scissors,
             Hand::Scissors => Hand::Rock,
         },
-        _ => panic!("Invalid strategy: {}", strategy),
     }
 }
 
