@@ -16,6 +16,7 @@ fn main() {
     match day {
         "day1" => days::day1::day1(args),
         "day2" => days::day2::day2(args),
+        "day3" => days::day3::day3(args),
         _ => eprintln!("Not a valid day: {day}"),
     }
 }
