@@ -60,21 +60,20 @@ struct Range {
 }
 
 impl Range {
-    fn from_str(input: &str) -> Result<Range, RangeInvalidErr> {
+    fn from_str(input: &str) -> Result<Range, RangeError> {
         match input.split_once('-') {
             Some((lhs, rhs)) => Range::from_strs(lhs, rhs),
-            None => Err(RangeInvalidErr {
-                msg: format!("Cannot split '{}' on '-'", input),
-            }),
+            None => Err(RangeError::Parse(format!(
+                "Cannot split '{}' on '-'",
+                input
+            ))),
         }
     }
-    fn from_strs(lhs: &str, rhs: &str) -> Result<Range, RangeInvalidErr> {
-        match (lhs.parse::<u32>(), rhs.parse::<u32>()) {
-            (Ok(start), Ok(end)) => Ok(Range { start, end }),
-            (Ok(_), Err(e)) | (Err(e), Ok(_)) | (Err(e), Err(_)) => Err(RangeInvalidErr {
-                msg: format!("Failed to parse number '{}-{}': {}", lhs, rhs, e),
-            }),
-        }
+    fn from_strs(lhs: &str, rhs: &str) -> Result<Range, RangeError> {
+        Ok(Range {
+            start: lhs.parse::<u32>()?,
+            end: rhs.parse::<u32>()?,
+        })
     }
     fn contains(&self, other: &Range) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
@@ -88,13 +87,18 @@ impl Range {
 }
 
 #[derive(Debug, Clone)]
-struct RangeInvalidErr {
-    msg: String,
+enum RangeError {
+    Parse(String),
 }
-impl Error for RangeInvalidErr {}
-impl fmt::Display for RangeInvalidErr {
+impl Error for RangeError {}
+impl fmt::Display for RangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Could not convert to Range : {}", self.msg)
+        write!(f, "Could not create Range : {}", self)
+    }
+}
+impl std::convert::From<std::num::ParseIntError> for RangeError {
+    fn from(err: std::num::ParseIntError) -> Self {
+        RangeError::Parse(format!("Failed to parse Range: {}", err))
     }
 }
 
