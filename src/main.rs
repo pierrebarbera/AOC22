@@ -19,6 +19,7 @@ fn main() {
         "day3" => days::day3::day3(args),
         "day4" => days::day4::day4(args),
         "day5" => days::day5::day5(args),
+        "day6" => days::day6::day6(args),
         _ => eprintln!("Not a valid day: {day}"),
     }
 }
