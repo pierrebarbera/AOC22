@@ -1,6 +1,8 @@
 use std::env;
+mod algorithm;
 mod days;
 mod io;
+mod iter;
 
 fn main() {
     let args: Vec<String> = env::args().collect();

@@ -39,10 +39,10 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-pub fn get_reader<P>(filename: P) -> io::BufReader<File>
+pub fn get_reader<P>(filename: P) -> io::Result<io::BufReader<File>>
 where
     P: AsRef<Path>,
 {
-    let file = File::open(filename).unwrap();
-    io::BufReader::new(file)
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file))
 }

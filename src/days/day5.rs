@@ -42,7 +42,7 @@ struct MoveOp {
 }
 
 fn solve(filename: &str) {
-    let mut reader = io::get_reader(filename);
+    let mut reader = io::get_reader(filename).unwrap();
     let mut line = String::new();
 
     // first loop: accumulate the stackstate into a string-stack until we reach the first empty line
