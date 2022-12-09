@@ -15,3 +15,31 @@ where
     }
     true
 }
+
+#[allow(dead_code)]
+pub fn contains_all<T, I>(haystack: &HashSet<T>, needles: I) -> bool
+where
+    T: Eq + std::hash::Hash,
+    I: IntoIterator<Item = T>,
+{
+    for n in needles {
+        if !haystack.contains(&n) {
+            return false;
+        }
+    }
+    true
+}
+
+#[allow(dead_code)]
+pub fn get_first_not_in_set<T, I>(haystack: &HashSet<T>, needles: I) -> Option<T>
+where
+    T: Eq + std::hash::Hash,
+    I: IntoIterator<Item = T>,
+{
+    for n in needles {
+        if !haystack.contains(&n) {
+            return Some(n);
+        }
+    }
+    None
+}

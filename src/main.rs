@@ -3,6 +3,7 @@ mod algorithm;
 mod days;
 mod io;
 mod iter;
+mod tree;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -22,6 +23,7 @@ fn main() {
         "day4" => days::day4::day4(args),
         "day5" => days::day5::day5(args),
         "day6" => days::day6::day6(args),
+        "day7" => days::day7::day7(args),
         _ => eprintln!("Not a valid day: {day}"),
     }
 }
