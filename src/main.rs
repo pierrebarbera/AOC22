@@ -5,6 +5,8 @@ mod io;
 mod iter;
 mod tree;
 
+extern crate itertools;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -24,6 +26,7 @@ fn main() {
         "day5" => days::day5::day5(args),
         "day6" => days::day6::day6(args),
         "day7" => days::day7::day7(args),
+        "day8" => days::day8::day8(args),
         _ => eprintln!("Not a valid day: {day}"),
     }
 }

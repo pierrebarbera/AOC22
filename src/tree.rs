@@ -159,7 +159,7 @@ pub fn print_tree<T>(root: NodeRef<T>)
 where
     T: Clone + std::fmt::Display,
 {
-    let mut level: usize = 0;
+    let level: usize = 0;
     let mut previous_node: NodeRef<T> = Rc::clone(&root);
     traverse_tree_apply_if(
         root,
@@ -197,6 +197,7 @@ where
     postorder_apply_if(root, p, f);
 }
 
+#[allow(dead_code)]
 fn to_usize_iter<'a, T, I>(iter: I) -> impl Iterator<Item = usize> + 'a
 where
     I: Iterator<Item = &'a NodeRef<T>> + 'a,

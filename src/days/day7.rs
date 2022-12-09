@@ -1,5 +1,5 @@
 use io;
-use std::{char::MAX, fmt};
+use std::fmt;
 use tree;
 
 type FsNodeRef = tree::NodeRef<FsNode>;
