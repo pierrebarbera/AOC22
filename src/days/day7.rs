@@ -1,5 +1,5 @@
 use io;
-use std::fmt;
+use std::{char::MAX, fmt};
 use tree;
 
 type FsNodeRef = tree::NodeRef<FsNode>;
@@ -14,6 +14,8 @@ pub fn day7(args: &[String]) {
 
     build_tree_from_log(&args[0], root.clone());
 
+    tree::print_tree(root.clone());
+
     let mut sum: usize = 0;
     tree::traverse_tree_apply_if(root.clone(), is_dir, |node| {
         if let FsNode::Dir(size) = node.borrow().value {
@@ -23,11 +25,31 @@ pub fn day7(args: &[String]) {
         }
     });
 
-    tree::print_tree(root);
-
     println!(
         "Sum of directory sizes with a total lower than 100000: {}",
         sum
+    );
+
+    let total_space: usize = 70000000;
+    let mut used_space: usize = 0;
+    if let FsNode::Dir(size) = root.borrow().value {
+        used_space = size;
+    }
+    let free_space: usize = total_space - used_space;
+    let space_needed: usize = 30000000 - free_space;
+
+    let mut size_smallest: usize = usize::MAX;
+    tree::traverse_tree_apply_if(root.clone(), is_dir, |node| {
+        if let FsNode::Dir(size) = node.borrow().value {
+            if size >= space_needed {
+                size_smallest = std::cmp::min(size, size_smallest);
+            }
+        }
+    });
+
+    println!(
+        "Size of smallest directory still above {}: {}",
+        space_needed, size_smallest
     );
 }
 

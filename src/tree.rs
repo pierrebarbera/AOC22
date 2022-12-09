@@ -214,7 +214,7 @@ where
     let mut stack: Vec<NodeRef<T>> = Vec::new();
     stack.push(root.clone());
     let mut cur_node = root.borrow().children[0].clone();
-    stack.extend(root.borrow().children[..].iter().rev().cloned());
+    stack.extend(root.borrow().children.iter().rev().cloned());
     let mut coming_up = false;
 
     while cur_node != root {
@@ -241,7 +241,7 @@ where
             // on the stack and go down
             next_node = cur_node.borrow().children[0].clone();
             // if the next one down is a leaf, no put on stack pls
-            stack.extend(cur_node.borrow().children[..].iter().rev().cloned());
+            stack.extend(cur_node.borrow().children.iter().rev().cloned());
             coming_up = false;
         }
         cur_node = Rc::clone(&next_node);
