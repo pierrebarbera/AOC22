@@ -25,12 +25,12 @@ pub fn day10(args: &[String]) {
     // render the image!
     let width: usize = 40;
     let height: usize = 6;
-    let mut image = vec![vec!['.'; width]; height];
+    let mut image = vec![vec!['🎄'; width]; height];
     foreach_cycle(&args[0], |cycle, x| {
         let col = cycle % width;
         if (x - 1..=x + 1).contains(&(col as i32)) {
             let row = cycle / width;
-            image[row][col] = '#';
+            image[row][col] = '🎁';
         }
     });
 
