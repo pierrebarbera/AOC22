@@ -13,6 +13,13 @@ struct Directional {
     left: i32,
     right: i32,
 }
+#[derive(Clone)]
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
 
 impl fmt::Display for Directional {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -73,6 +80,80 @@ pub fn day8(args: &[String]) {
     }
 
     println!("Number of visible trees on the map: {}", sum_visible_trees);
+
+    let mut num_visible: Vec<Vec<Directional>> = vec![
+        vec![
+            Directional {
+                up: 0,
+                down: 0,
+                left: 0,
+                right: 0,
+            };
+            map[0].len()
+        ];
+        map.len()
+    ];
+
+    for row in 0..map.len() {
+        for col in 0..map[row].len() {
+            num_visible[row][col].up = count_visible_trees(&map, row, col, &Direction::Up);
+            num_visible[row][col].down = count_visible_trees(&map, row, col, &Direction::Down);
+            num_visible[row][col].left = count_visible_trees(&map, row, col, &Direction::Left);
+            num_visible[row][col].right = count_visible_trees(&map, row, col, &Direction::Right);
+        }
+    }
+
+    // print_matrix(&map);
+    // print_matrix(&num_visible);
+
+    let mut max_scenic_score = 0;
+    for row in num_visible {
+        for val in row {
+            let score = val.up * val.down * val.left * val.right;
+            max_scenic_score = max(max_scenic_score, score);
+        }
+    }
+    println!("Highest scenic score: {}", max_scenic_score);
+}
+
+fn in_bounds(map: &Vec<Vec<i32>>, row: i32, col: i32) -> bool {
+    if row < 0 || col < 0 {
+        return false;
+    }
+    let row: usize = row.try_into().unwrap();
+    let col: usize = col.try_into().unwrap();
+    row < map.len() && col < map[row].len()
+}
+
+fn count_visible_trees(map: &Vec<Vec<i32>>, row: usize, col: usize, dir: &Direction) -> i32 {
+    let height = map[row][col];
+    let (row_dir, col_dir) = match dir {
+        Direction::Up => (-1i32, 0i32),
+        Direction::Down => (1, 0),
+        Direction::Left => (0, -1),
+        Direction::Right => (0, 1),
+    };
+
+    let mut next_row: i32 = row.try_into().unwrap();
+    let mut next_col: i32 = col.try_into().unwrap();
+
+    let mut count: i32 = 0;
+    loop {
+        next_row = next_row + row_dir;
+        next_col = next_col + col_dir;
+        if !in_bounds(map, next_row, next_col) {
+            break;
+        }
+        // we've made a valid step
+        count += 1;
+
+        // abort if this step was the terminator tree
+        if map[next_row as usize][next_col as usize] >= height {
+            break;
+        }
+    }
+
+    count
 }
 
 fn is_visible(height: i32, visibility: &Directional) -> bool {
