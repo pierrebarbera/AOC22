@@ -2,6 +2,18 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 
+pub fn foreach_nonempty_line<P, F>(filename: P, mut f: F)
+where
+    P: AsRef<Path>,
+    F: FnMut(&str),
+{
+    foreach_line(filename, |line| {
+        if !line.is_empty() {
+            f(line);
+        }
+    });
+}
+
 pub fn foreach_line<P, F>(filename: P, mut f: F)
 where
     P: AsRef<Path>,
