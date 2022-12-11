@@ -10,8 +10,6 @@ pub fn day11(args: &[String]) {
     let mut highscore = play_monkey_keepaway(&args[0], 20, true);
     print_monkeybusiness(&highscore);
 
-    // let highscore = play_monkey_keepaway(&args[0], 10000, |worry| worry);
-    // print_monkeybusiness(&highscore);
     highscore = play_monkey_keepaway(&args[0], 10000, false);
     print_monkeybusiness(&highscore);
 }
