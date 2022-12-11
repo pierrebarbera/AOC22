@@ -1,6 +1,6 @@
 use io;
 
-type Uint = u128;
+type Uint = u64;
 
 pub fn day11(args: &[String]) {
     if args.len() != 1 {
@@ -32,7 +32,6 @@ struct Score {
 }
 
 fn print_monkeybusiness(highscore: &Vec<Score>) {
-    // let mut monkeybusiness: u128 = u128::from(highscore[0].score) * u128::from(highscore[1].score);
     let mut monkeybusiness: Uint = 1;
     for score in highscore[0..2].iter() {
         monkeybusiness *= score.score;
@@ -44,7 +43,7 @@ fn play_monkey_keepaway(filename: &str, rounds: usize, worry_div_3: bool) -> Vec
     println!("Playing {} rounds of keep away", rounds);
     let mut monkeys = parse_monkeys(filename);
 
-    let mut div: Uint = 0;
+    let mut div: Uint;
     let manage_worry: Box<dyn Fn(Uint) -> Uint> = match worry_div_3 {
         true => Box::new(|worry| worry / 3),
         false => {
