@@ -1,3 +1,4 @@
+use direction::Direction;
 use io;
 use itertools::Either;
 use std::cmp::max;
@@ -12,13 +13,6 @@ struct Directional {
     down: i32,
     left: i32,
     right: i32,
-}
-#[derive(Clone)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 impl fmt::Display for Directional {

@@ -60,7 +60,6 @@ fn play_monkey_keepaway(filename: &str, rounds: usize, worry_div_3: bool) -> Vec
         for m in 0..monkeys.len() {
             while !monkeys[m].items.is_empty() {
                 let (item, target) = monkeys[m].inspect(&manage_worry);
-
                 monkeys[target].items.push(item);
             }
         }

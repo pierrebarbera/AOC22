@@ -1,6 +1,7 @@
 use std::env;
 mod algorithm;
 mod days;
+mod direction;
 mod io;
 mod iter;
 mod tree;
@@ -30,6 +31,7 @@ fn main() {
         "day9" => days::day9::day9(args),
         "day10" => days::day10::day10(args),
         "day11" => days::day11::day11(args),
+        "day12" => days::day12::day12(args),
         _ => eprintln!("Not a valid day: {day}"),
     }
 }

@@ -3,5 +3,8 @@ name = "expedition"
 version = "0.1.0"
 authors = ["Pierre Barbera <pierre.pbdas@gmail.com>"]
 
+[profile.release]
+opt-level = 2
+
 [dependencies]
 itertools = "0.10.5"

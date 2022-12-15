@@ -1,3 +1,4 @@
+use direction::Direction;
 use io;
 use std::cmp::Ordering;
 use std::collections::HashSet;
@@ -104,14 +105,6 @@ fn step(d1: i32, d2: i32) -> i32 {
         Ordering::Greater => -1,
         Ordering::Equal => 0,
     }
-}
-
-#[derive(Clone)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 impl From<&str> for Direction {
