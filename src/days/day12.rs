@@ -1,5 +1,6 @@
 use direction::Direction;
 use io;
+use std::cmp;
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 use std::fmt;
@@ -19,9 +20,27 @@ pub fn day12(args: &[String]) {
 
     // print!("{}", map);
 
-    let length = dijkstra(&mut map);
+    let length = dijkstra(&mut map).unwrap();
 
-    println!("Shortest path length from S to E: {}", length.unwrap());
+    println!("Shortest path length from S to E: {}", length);
+
+    let start_height = to_height('a');
+    let mut start_coords: Vec<Coord> = Vec::new();
+    for (y, row) in map.map.iter_mut().enumerate() {
+        for (x, grid) in row.iter_mut().enumerate() {
+            if grid.height == start_height {
+                start_coords.push(Coord { x, y, distance: 0 });
+            }
+        }
+    }
+    let mut min_length = usize::MAX;
+    for start in start_coords {
+        map.my_pos = start.clone();
+        if let Some(length) = dijkstra(&mut map) {
+            min_length = cmp::min(min_length, length);
+        }
+    }
+    println!("Shortest path length from S to E: {}", min_length);
 }
 
 fn parse_map(filename: &str) -> HeightMap {
@@ -224,12 +243,16 @@ impl PartialOrd for Coord {
 }
 
 fn dijkstra(map: &mut HeightMap) -> Option<usize> {
-    // make sure to reset visited values
+    // make sure to reset visited and distance
     for row in map.map.iter_mut() {
         for grid in row.iter_mut() {
             grid.visited = false;
+            grid.distance = usize::MAX;
         }
     }
+    map.my_pos.distance = 0;
+    map.at_mut(&map.my_pos.clone()).distance = 0;
+
     let target = map.target_pos.clone();
 
     let mut unvisited = BinaryHeap::new();
